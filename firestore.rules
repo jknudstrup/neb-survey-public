@@ -1,0 +1,25 @@
+//Update 1420-7-6-2019
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function loggedIn() {
+        return request.auth != null;
+      }
+    match /questions/{question} {
+      allow read;
+      allow write: if loggedIn();
+    }
+    match /responses/{response} {
+      allow read, create;
+      allow update, delete: if loggedIn();
+    }
+    
+    match /questions-backup/{question} {
+      allow read: if loggedIn();
+      allow write: if loggedIn();
+    }
+    match /users/{user} {
+      allow read;
+    }
+  }
+}
